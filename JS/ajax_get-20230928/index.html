@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET AJAX XMLHttpRequest</title>
+</head>
+<body>
+
+    <button id="btnget">Get Data</button>
+    <p id="content"></p>
+
+    <script type="text/javascript">
+        // Your JavaScript code here
+
+        let btn = document.getElementById('btnget');
+        btn.addEventListener('click', runAjax);
+
+        let content = document.getElementById("content");
+
+        function runAjax() {
+            let xhr = new XMLHttpRequest();
+            
+            xhr.open('GET', 'data.json', true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        console.log(xhr.responseText);
+                        var data = JSON.parse(xhr.responseText);
+
+                        // Check if the data is an array
+                        if (Array.isArray(data.names)) {
+                            // Construct the HTML to display the names
+                            let html = "<ul>";
+                            data.names.forEach(function(name) {
+                                html += "<li>" + name + "</li>";
+                            });
+                            html += "</ul>";
+
+                            // Set the HTML content
+                            content.innerHTML = html;
+                        } else {
+                            content.innerText = "Data is not an array of names.";
+                        }
+                    } else {
+                        content.innerText = "Error: File Not Found";
+                    }
+                }
+            }
+
+            xhr.send();
+        }
+    </script>
+
+</body>
+</html>
